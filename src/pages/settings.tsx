@@ -1,9 +1,11 @@
 import Layout from "./layout";
 
-export default function Home() {
+const Profile = () => {
   return (
     <Layout>
-      <h1>System</h1>
+      <h1>Profile</h1>
     </Layout>
   );
-}
+};
+
+export default Profile;

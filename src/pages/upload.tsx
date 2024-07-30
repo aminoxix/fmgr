@@ -1,9 +1,11 @@
 import Layout from "./layout";
 
-export default function Home() {
+const Upload = () => {
   return (
     <Layout>
-      <h1>System</h1>
+      <h1>Upload</h1>
     </Layout>
   );
-}
+};
+
+export default Upload;
