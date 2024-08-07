@@ -1,9 +1,10 @@
+import Heading from "~/components/text/heading";
 import Layout from "./layout";
 
 const Profile = () => {
   return (
     <Layout>
-      <h1>Profile</h1>
+      <Heading>User Settings</Heading>
     </Layout>
   );
 };

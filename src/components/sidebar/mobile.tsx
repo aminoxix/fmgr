@@ -6,7 +6,8 @@ import { sidebarMenus as menus } from "~/lib/data";
 
 const MobileSidebar = () => {
   return (
-    <aside className="sticky flex justify-between gap-2 md:invisible">
+    <aside className="sticky flex w-full justify-between gap-2 md:invisible">
+      <div className="h-12 w-12"></div>
       <div className="flex rounded-full border border-gray-300 bg-gray-900 bg-opacity-0 bg-clip-padding backdrop-blur-sm backdrop-filter">
         {menus.map((menu) => (
           <Link

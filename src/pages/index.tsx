@@ -1,9 +1,10 @@
+import Heading from "~/components/text/heading";
 import Layout from "./layout";
 
 export default function Home() {
   return (
     <Layout>
-      <h1>System</h1>
+      <Heading>Dashboard</Heading>
     </Layout>
   );
 }

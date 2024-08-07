@@ -1,10 +1,11 @@
+import crypto from "crypto";
 import { relations, sql } from "drizzle-orm";
 import {
   index,
   integer,
+  jsonb,
   pgTableCreator,
   primaryKey,
-  serial,
   text,
   timestamp,
   varchar,
@@ -18,27 +19,6 @@ import { type AdapterAccount } from "next-auth/adapters";
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
 export const createTable = pgTableCreator((name) => `fmgr_${name}`);
-
-export const posts = createTable(
-  "post",
-  {
-    id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
-    createdById: varchar("created_by", { length: 255 })
-      .notNull()
-      .references(() => users.id),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-      () => new Date()
-    ),
-  },
-  (example) => ({
-    createdByIdIdx: index("created_by_idx").on(example.createdById),
-    nameIndex: index("name_idx").on(example.name),
-  })
-);
 
 export const users = createTable("user", {
   id: varchar("id", { length: 255 })
@@ -84,7 +64,7 @@ export const accounts = createTable(
       columns: [account.provider, account.providerAccountId],
     }),
     userIdIdx: index("account_user_id_idx").on(account.userId),
-  })
+  }),
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -107,7 +87,7 @@ export const sessions = createTable(
   },
   (session) => ({
     userIdIdx: index("session_user_id_idx").on(session.userId),
-  })
+  }),
 );
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
@@ -126,5 +106,60 @@ export const verificationTokens = createTable(
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-  })
+  }),
 );
+
+export const folder = createTable(
+  "folder",
+  {
+    id: varchar("id", { length: 255 })
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    name: varchar("name", { length: 255 }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .$defaultFn(() => new Date()),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .$defaultFn(() => new Date()),
+    modification: jsonb("modification").array(),
+    createdBy: varchar("created_by", { length: 255 }).references(
+      () => users.id,
+    ),
+    parentId: varchar("parent_id"),
+  },
+  (folder) => ({
+    parentIdIdx: index("parent_id_idx").on(folder.parentId),
+  }),
+);
+
+export const folderRelations = relations(folder, ({ one, many }) => ({
+  files: many(file),
+  parent: one(folder, {
+    fields: [folder.parentId],
+    references: [folder.id],
+    relationName: "FoldersToFolders",
+  }),
+  children: many(folder, {
+    relationName: "FoldersToFolders",
+  }),
+}));
+
+export const file = createTable("file", {
+  id: varchar("id", { length: 255 })
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  createdAt: timestamp("created_at", { withTimezone: true }),
+  name: varchar("name", { length: 256 }),
+  url: varchar("url", { length: 256 }),
+  createdBy: varchar("created_by", { length: 255 }).references(() => users.id),
+  folderId: varchar("folder_id", { length: 255 }).references(() => folder.id, {
+    onDelete: "cascade",
+  }),
+});
+
+export const fileRelations = relations(file, ({ one }) => ({
+  folder: one(folder, { fields: [file.folderId], references: [folder.id] }),
+}));

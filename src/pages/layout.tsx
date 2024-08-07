@@ -23,7 +23,7 @@ export default function Layout({ children }: PropsWithChildrenType) {
         {data ? (
           <div className="flex min-h-screen flex-1">
             <DesktopSidebar />
-            <div className="flex min-h-screen flex-1 flex-col items-center justify-between bg-black py-4 text-white">
+            <div className="flex min-h-screen flex-1 flex-col items-center justify-between gap-4 bg-black px-4 py-4 text-white md:px-12">
               <Image
                 className="h-15 w-15 items-center justify-center rounded-md border border-gray-300 bg-gray-900 bg-opacity-0 bg-clip-padding p-2 backdrop-blur-sm backdrop-filter md:invisible"
                 src="/fmgr.png"
@@ -31,7 +31,9 @@ export default function Layout({ children }: PropsWithChildrenType) {
                 width={50}
                 height={50}
               />
-              {children}
+              <div className="h-ful flex w-full flex-1 flex-col gap-4 md:gap-6">
+                {children}
+              </div>
               <MobileSidebar />
             </div>
           </div>

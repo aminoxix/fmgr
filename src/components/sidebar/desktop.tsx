@@ -13,7 +13,7 @@ const DesktopSidebar = () => {
   const { data: sessionData } = useSession();
 
   return (
-    <aside className="hidden basis-1/4 flex-col justify-between rounded-r-xl border-r border-slate-700 bg-black p-4 md:flex md:p-8">
+    <aside className="hidden basis-1/4 flex-col justify-between rounded-r-xl border-r border-white/20 bg-black p-4 md:flex md:p-8">
       <h1 className="text-base font-extrabold tracking-tight text-white">
         <Image src="/fmgr.png" alt="f manager" width={50} height={50} />
         <span className="text-yellow-300">f</span> Manager
