@@ -408,7 +408,6 @@ export const fManagerRouter = createTRPCRouter({
           id: true,
           name: true,
           url: true,
-          fileType: true,
         },
         orderBy: (file, { desc }) => [desc(file.createdAt)],
       });
