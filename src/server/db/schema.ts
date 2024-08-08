@@ -151,8 +151,14 @@ export const file = createTable("file", {
     .notNull()
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  createdAt: timestamp("created_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .$defaultFn(() => new Date()),
   name: varchar("name", { length: 256 }),
+  type: varchar("type", { length: 256 }),
   url: varchar("url", { length: 256 }),
   createdBy: varchar("created_by", { length: 255 }).references(() => users.id),
   folderId: varchar("folder_id", { length: 255 }).references(() => folder.id, {

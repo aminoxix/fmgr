@@ -1,12 +1,14 @@
-import System from "~/components/system";
+import SystemSlug from "~/components/system/slug";
 import Heading from "~/components/text/heading";
 import Layout from "./layout";
 
-export default function Home() {
+const Slug = () => {
   return (
     <Layout>
       <Heading>Dashboard</Heading>
-      <System />
+      <SystemSlug />
     </Layout>
   );
-}
+};
+
+export default Slug;

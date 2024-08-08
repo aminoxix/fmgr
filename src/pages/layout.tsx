@@ -31,7 +31,7 @@ export default function Layout({ children }: PropsWithChildrenType) {
                 width={50}
                 height={50}
               />
-              <div className="h-ful flex w-full flex-1 flex-col gap-4 md:gap-6">
+              <div className="flex h-full min-w-full flex-1 flex-col gap-4 md:gap-6">
                 {children}
               </div>
               <MobileSidebar />

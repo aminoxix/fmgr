@@ -158,6 +158,7 @@ export const fManagerRouter = createTRPCRouter({
       z.object({
         name: z.string(),
         url: z.string(),
+        type: z.string(),
         folderId: z.string(),
       }),
     )
@@ -165,7 +166,7 @@ export const fManagerRouter = createTRPCRouter({
       if (!ctx.session.user) {
         throw new TRPCClientError("User not found");
       }
-      const { name, url, folderId } = input;
+      const { name, url, type, folderId } = input;
       const folderData = await ctx.db.query.folder.findFirst({
         where: (folder, funcs) => funcs.eq(folder.id, folderId),
       });
@@ -173,6 +174,7 @@ export const fManagerRouter = createTRPCRouter({
       await ctx.db.insert(file).values({
         name,
         url,
+        type,
         folderId,
         createdBy: ctx.session.user.id,
       });
@@ -408,6 +410,7 @@ export const fManagerRouter = createTRPCRouter({
           id: true,
           name: true,
           url: true,
+          type: true,
         },
         orderBy: (file, { desc }) => [desc(file.createdAt)],
       });

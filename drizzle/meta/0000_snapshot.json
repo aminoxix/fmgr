@@ -1,5 +1,5 @@
 {
-  "id": "eab0330e-f9c7-48b4-bdb7-2e03fe1dc0e7",
+  "id": "489b7ee8-d523-4e44-a7e7-0eb413ddc3c1",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -132,7 +132,13 @@
           "name": "created_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
         },
         "name": {
           "name": "name",
@@ -140,14 +146,14 @@
           "primaryKey": false,
           "notNull": false
         },
-        "url": {
-          "name": "url",
+        "type": {
+          "name": "type",
           "type": "varchar(256)",
           "primaryKey": false,
           "notNull": false
         },
-        "file_type": {
-          "name": "file_type",
+        "url": {
+          "name": "url",
           "type": "varchar(256)",
           "primaryKey": false,
           "notNull": false

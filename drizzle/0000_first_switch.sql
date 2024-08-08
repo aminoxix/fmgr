@@ -15,10 +15,11 @@ CREATE TABLE IF NOT EXISTS "fmgr_account" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "fmgr_file" (
 	"id" varchar(255) PRIMARY KEY NOT NULL,
-	"created_at" timestamp with time zone,
+	"created_at" timestamp with time zone NOT NULL,
+	"updated_at" timestamp with time zone NOT NULL,
 	"name" varchar(256),
+	"type" varchar(256),
 	"url" varchar(256),
-	"file_type" varchar(256),
 	"created_by" varchar(255),
 	"folder_id" varchar(255)
 );

@@ -28,7 +28,7 @@ import {
 } from "~/components/ui/select";
 import { useToast } from "~/components/ui/use-toast";
 
-import { UploadDropzone } from "~/lib/utils";
+import { UploadDropzone } from "~/components/buttons/uploadthing";
 import Layout from "./layout";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,14 +38,13 @@ import { api } from "~/utils/api";
 
 const Upload = () => {
   const { toast } = useToast();
+
   const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const [fileUrl, setFileUrl] = useState<string | undefined>(undefined);
 
   const { data: folders } = api.fManager.getAllFolders.useQuery();
   const { mutate: createFile } = api.fManager.createFile.useMutation({
     onSuccess: () => {
       setOpenDialog(false);
-      setFileUrl(undefined);
       form.reset();
       toast({
         style: {
@@ -65,10 +64,6 @@ const Upload = () => {
     },
   });
 
-  useEffect(() => {
-    setOpenDialog(!!fileUrl);
-  }, [fileUrl]);
-
   const formSchema = z.object({
     name: z.string().min(2, {
       message: "Name must be at least 2 characters.",
@@ -76,6 +71,10 @@ const Upload = () => {
     folder: z.string().min(1, {
       message: "Folder must be selected.",
     }),
+    url: z.string().url({
+      message: "URL must be a valid URL.",
+    }),
+    type: z.string(),
   });
 
   // 1. Define your form.
@@ -83,10 +82,18 @@ const Upload = () => {
     resolver: zodResolver(formSchema),
     mode: "onChange",
     defaultValues: {
+      url: "",
+      type: "",
       name: "",
       folder: "",
     },
   });
+
+  const url = form.watch("url");
+
+  useEffect(() => {
+    setOpenDialog(!!url);
+  }, [url]);
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -95,7 +102,8 @@ const Upload = () => {
     createFile({
       name: values.name,
       folderId: values.folder,
-      url: fileUrl!,
+      url: values.url,
+      type: values.type,
     });
   }
 
@@ -107,7 +115,7 @@ const Upload = () => {
           open={openDialog}
           onOpenChange={(open) => {
             if (!open) {
-              setFileUrl(undefined);
+              form.setValue("url", "");
             }
           }}
         >
@@ -173,42 +181,20 @@ const Upload = () => {
                       </FormItem>
                     )}
                   />
-                  {/* <Button type="submit">Submit</Button> */}
                   <DialogFooter className="pt-4">
                     <Button type="submit">Submit</Button>
                   </DialogFooter>
                 </form>
               </Form>
-              {/* <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Name
-                </Label>
-                <Input id="name" value="" className="col-span-3" />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Folder
-                </Label>
-                <Select>
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Theme" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="light">Light</SelectItem>
-                    <SelectItem value="dark">Dark</SelectItem>
-                    <SelectItem value="system">System</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div> */}
             </div>
           </DialogContent>
         </Dialog>
       )}
-      {fileUrl ? (
+      {url ? (
         <Image
           width={500}
           height={500}
-          src={fileUrl}
+          src={url}
           loading="lazy"
           alt="Uploaded Image"
           className="rounded-md"
@@ -223,23 +209,25 @@ const Upload = () => {
               label: {
                 color: "#FDE047",
               },
-              button: ({ ready, isUploading }) =>
-                `ut-ready:bg-yellow-300 text-black ut-uploading:cursor-not-allowed rounded bg-white/20 bg-none after:bg-yellow-300`,
-              container: () => `mt-4 flex w-full h-full`,
-              uploadIcon: ({ ready, isUploading }) => `text-yellow-300`,
-              // allowedContent: {
-              //   color: "#a1a1aa",
-              // },
+              button: ({ isUploading }) =>
+                `ut-ready:bg-yellow-300 ut-uploading:cursor-not-allowed rounded bg-white/20 bg-none after:bg-yellow-300 ${isUploading ? "text-yellow-300" : "text-black"}`,
+              container: () => "mt-4 flex w-full h-full",
+              uploadIcon: () => "text-yellow-300",
             }}
             endpoint="imageUploader"
             onClientUploadComplete={(res) => {
               // Do something with the response
               // alert("Upload Completed");
-              setFileUrl(res[0]?.url);
+              form.setValue("type", res[0]?.type ?? "");
+              form.setValue("url", res[0]?.url ?? "");
             }}
             onUploadError={(error: Error) => {
               // Do something with the error.
               console.error(`ERROR! ${error.message}`);
+              toast({
+                title: "Failed to upload file",
+                description: `Error uploading file: ${error.message}`,
+              });
             }}
           />
         </div>
