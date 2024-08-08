@@ -9,12 +9,12 @@ import { useForm } from "@mantine/form";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 
 import { LuFolderEdit } from "react-icons/lu";
@@ -22,24 +22,25 @@ import { LuFolderEdit } from "react-icons/lu";
 import Image from "next/image";
 import type { JSONValue } from "postgres";
 import {
-    PiArrowLeft,
-    PiDotsThree,
-    PiDownload,
-    PiEye,
-    PiFileAudio,
-    PiFileDoc,
-    PiFilePdf,
-    PiFilePng,
-    PiFileTxt,
-    PiFileZip,
-    PiFolder,
-    PiFolderOpen,
-    PiFolderPlus,
-    PiList,
-    PiMagnifyingGlass,
-    PiTable,
-    PiTrash,
-    PiVideo,
+  PiArrowLeft,
+  PiDotsThree,
+  PiDownload,
+  PiEye,
+  PiFileAudio,
+  PiFileDoc,
+  PiFilePdf,
+  PiFilePlus,
+  PiFilePng,
+  PiFileTxt,
+  PiFileZip,
+  PiFolder,
+  PiFolderOpen,
+  PiFolderPlus,
+  PiList,
+  PiMagnifyingGlass,
+  PiTable,
+  PiTrash,
+  PiVideo,
 } from "react-icons/pi";
 import FileDisplay from "~/components/file-details";
 import FilesTable from "~/components/files-table";
@@ -493,6 +494,18 @@ const SystemSlug = () => {
             >
               <PiFolderPlus />
             </button>
+            <button
+              disabled={allFolders?.length === 0}
+              className="rounded-md border border-white/40 p-1.5 md:hidden"
+              onClick={() => {
+                setFileId("");
+                fileForm.reset();
+                setDetailsFileId("");
+                setOpenFileModal(true);
+              }}
+            >
+              <PiFilePlus />
+            </button>
             <Button
               disabled={allFolders?.length === 0}
               onClick={() => {
@@ -501,7 +514,7 @@ const SystemSlug = () => {
                 setDetailsFileId("");
                 setOpenFileModal(true);
               }}
-              className="h-[34px] w-auto rounded border-white/40 bg-white/20 hover:border hover:bg-transparent md:w-40"
+              className="hidden h-[34px] w-auto rounded border-white/40 bg-white/20 hover:border hover:bg-transparent md:block md:w-40"
             >
               Add File
             </Button>

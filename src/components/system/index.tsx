@@ -18,6 +18,7 @@ import {
   PiFileAudio,
   PiFileDoc,
   PiFilePdf,
+  PiFilePlus,
   PiFilePng,
   PiFileTxt,
   PiFileZip,
@@ -518,6 +519,17 @@ const System = () => {
             >
               <PiFolderPlus />
             </button>
+            <button
+              disabled={allFolders?.length === 0}
+              className="rounded-md border border-white/40 p-1.5 md:hidden"
+              onClick={() => {
+                setFileId("");
+                fileForm.reset();
+                setOpenFileModal(true);
+              }}
+            >
+              <PiFilePlus />
+            </button>
             <Button
               disabled={allFolders?.length === 0}
               onClick={() => {
@@ -525,7 +537,7 @@ const System = () => {
                 fileForm.reset();
                 setOpenFileModal(true);
               }}
-              className="h-[34px] w-auto rounded border-white/40 bg-white/20 hover:border hover:bg-transparent md:w-40"
+              className="hidden h-[34px] w-auto rounded border-white/40 bg-white/20 hover:border hover:bg-transparent md:block md:w-40"
             >
               Add File
             </Button>
