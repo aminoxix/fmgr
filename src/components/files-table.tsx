@@ -21,6 +21,15 @@ import {
 //   Txt17Icon,
 //   Zip17Icon,
 // } from "@/ui/icons";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "~/components/ui/dialog";
+
 import moment from "moment";
 import { TbDots, TbEye, TbFolderOpen, TbTrash } from "react-icons/tb";
 
@@ -30,8 +39,6 @@ import { useRouter } from "next/router";
 import { LuFileEdit, LuFolderEdit } from "react-icons/lu";
 import { api } from "~/utils/api";
 
-import { Button, Group, Modal } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { type JSONValue } from "postgres";
 import {
   PiFile,
@@ -52,6 +59,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { Button } from "./ui/button";
 import { useToast } from "./ui/use-toast";
 
 const FilesTable = ({
@@ -100,8 +108,7 @@ const FilesTable = ({
   const router = useRouter();
   const { toast } = useToast();
 
-  const [deleteOpened, { open: deleteOpen, close: deleteClose }] =
-    useDisclosure(false);
+  const [openedDelete, setOpenedDelete] = useState<boolean>(false);
   const [entityId, setEntityId] = useState<string>("");
   const [downloadFolderName, setDownloadFolderName] = useState<string>("");
   const [filesById, setFilesById] = useState<
@@ -161,7 +168,7 @@ const FilesTable = ({
       void refetchFolders();
       void refetchFiles();
       void refetchSingleFolder();
-      deleteClose();
+      setOpenedDelete(false);
     },
     onError: (error) => {
       toast({
@@ -222,7 +229,7 @@ const FilesTable = ({
       void refetchFiles();
       void refetchSingleFolder();
       void refetchFilesOfFolder();
-      deleteClose();
+      setOpenedDelete(false);
     },
     onError: (error) => {
       toast({
@@ -468,7 +475,7 @@ const FilesTable = ({
                                 className="cursor-pointer py-2 text-red-600 hover:!text-red-700"
                                 onClick={() => {
                                   setEntityId(entity.id);
-                                  deleteOpen();
+                                  setOpenedDelete(true);
                                 }}
                               >
                                 <TbTrash size={14} className="mr-2" />
@@ -481,49 +488,52 @@ const FilesTable = ({
                     </div>
                   </TableCell>
                 </TableRow>
-                <Modal
-                  opened={deleteOpened}
-                  onClose={() => {
+                <Dialog
+                  open={openedDelete}
+                  onOpenChange={() => {
                     setEntityId("");
-                    deleteClose();
+                    setOpenedDelete(false);
                   }}
-                  withCloseButton={false}
-                  title="Are you sure?"
-                  centered
-                  closeOnEscape
                 >
-                  <div className="pb-4">
-                    Do you really want to delete these records?
-                  </div>
-                  <Group justify="right">
-                    <Button
-                      className="border border-white/20 bg-white text-white/20 hover:bg-white"
-                      onClick={() => {
-                        setEntityId("");
-                        deleteClose();
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      className="bg-red-600 text-white hover:bg-red-700"
-                      onClick={() => {
-                        (allFiles?.some((file) => file.id === entityId) ??
-                        singleFolder?.files.some(
-                          (file) => file.id === entityId,
-                        ))
-                          ? deleteOneFile({
-                              id: entityId,
-                            })
-                          : deleteFolder({
-                              id: entityId,
-                            });
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  </Group>
-                </Modal>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Delete</DialogTitle>
+                      <DialogDescription>
+                        Do you really want to delete these records?
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <Button
+                        variant="ghost"
+                        className="border border-white/20 bg-white text-white/20 hover:bg-white"
+                        onClick={() => {
+                          setEntityId("");
+                          setOpenedDelete(false);
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        className="bg-red-600 text-white hover:bg-red-700"
+                        onClick={() => {
+                          (allFiles?.some((file) => file.id === entityId) ??
+                          singleFolder?.files.some(
+                            (file) => file.id === entityId,
+                          ))
+                            ? deleteOneFile({
+                                id: entityId,
+                              })
+                            : deleteFolder({
+                                id: entityId,
+                              });
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </>
             ))}
         </TableBody>

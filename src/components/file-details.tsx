@@ -4,7 +4,15 @@ import { saveAs } from "file-saver";
 import moment from "moment";
 import Image from "next/image";
 import React from "react";
-import { PiFile, PiFilePng } from "react-icons/pi";
+import {
+  PiFileAudio,
+  PiFileDoc,
+  PiFilePdf,
+  PiFilePng,
+  PiFileTxt,
+  PiFileZip,
+  PiVideo,
+} from "react-icons/pi";
 import { TbDownload, TbEye } from "react-icons/tb";
 import { api } from "~/utils/api";
 
@@ -253,27 +261,41 @@ const FileDisplay: React.FC<{
 export default FileDisplay;
 
 function GetFileExtension({
-  name,
   type,
   url,
+  name,
 }: {
-  name: string;
   type: string;
   url: string;
+  name: string;
 }) {
-  const fileExtension = type?.split("/");
-  console.log(fileExtension, "fileExtension");
-  if (fileExtension) {
-    if (fileExtension[0] === "image") {
-      return <Image alt={name} src={url} width="150" height="150" />;
-    }
-
-    return (
-      <div className="w-20">
-        <PiFile color="#309df4" />
-      </div>
-    );
-  }
+  return (
+    <div>
+      {type?.includes("image") ? (
+        <Image
+          src={url}
+          alt={name}
+          width="150"
+          height="150"
+          className="rounded"
+        />
+      ) : type?.includes("pdf") ? (
+        <PiFilePdf width="150" height="150" className="h-24 w-24" />
+      ) : type?.includes("audio") ? (
+        <PiFileAudio width="150" height="150" className="h-24 w-24" />
+      ) : type?.includes("video") ? (
+        <PiVideo width="150" height="150" className="h-24 w-24" />
+      ) : type?.includes("text") ? (
+        <PiFileTxt width="150" height="150" className="h-24 w-24" />
+      ) : type?.includes("zip") ? (
+        <PiFileZip width="150" height="150" className="h-24 w-24" />
+      ) : type?.includes("document") ? (
+        <PiFileDoc width="150" height="150" className="h-24 w-24" />
+      ) : type?.includes("png") ? (
+        <PiFilePng width="150" height="150" className="h-24 w-24" />
+      ) : null}
+    </div>
+  );
 }
 
 const fileExtension = (type: string) => {

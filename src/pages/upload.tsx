@@ -1,6 +1,13 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import Heading from "~/components/text/heading";
+import { api } from "~/utils/api";
+import Layout from "./layout";
+
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
@@ -29,12 +36,6 @@ import {
 import { useToast } from "~/components/ui/use-toast";
 
 import { UploadDropzone } from "~/components/buttons/uploadthing";
-import Layout from "./layout";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { api } from "~/utils/api";
 
 const Upload = () => {
   const { toast } = useToast();

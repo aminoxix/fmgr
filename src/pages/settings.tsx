@@ -1,19 +1,22 @@
-import { ActionIcon, CopyButton, Tooltip, rem } from "@mantine/core";
 import { useSession } from "next-auth/react";
+import Layout from "./layout";
+
+import { ActionIcon, CopyButton, Tooltip, rem } from "@mantine/core";
 import { PiCheck, PiCopy } from "react-icons/pi";
+
 import Heading from "~/components/text/heading";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import Layout from "./layout";
 
 const Profile = () => {
   const { data: sessionData } = useSession();
-  console.log("sessionData", sessionData);
+
   return (
     <Layout>
       <Heading>User Settings</Heading>
       <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <Avatar className="flex h-44 w-44 shrink-0 overflow-hidden rounded-md border border-white/20 p-4">
           <AvatarImage
+            className="rounded-md"
             src={String(sessionData?.user?.image)}
             alt={String(sessionData?.user?.name)}
           />

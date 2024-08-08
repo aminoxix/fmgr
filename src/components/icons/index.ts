@@ -1,0 +1,1 @@
+export { HeroIcon } from "./hero";
