@@ -7,7 +7,7 @@ import JSZip from "jszip";
 import moment from "moment";
 import { api } from "~/utils/api";
 
-import { Avatar, Button } from "@mantine/core";
+import { Avatar } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useClickOutside } from "@mantine/hooks";
 
@@ -38,15 +38,6 @@ import FileModal, { RenameFileModal } from "../modals/file";
 import FolderModal from "../modals/folder";
 
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -54,6 +45,21 @@ import {
   DialogHeader,
   DialogTitle,
 } from "~/components/ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
+import { Button } from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
@@ -498,7 +504,7 @@ const System = () => {
       </Drawer>
 
       {isPending ? (
-        <LuLoader2 className="h-6 w-6" color="#fff" />
+        <LuLoader2 className="h-6 w-6 animate-spin" color="#fff" />
       ) : (
         <div className="flex w-full flex-col gap-8 md:p-4">
           <div className="flex items-center justify-between gap-2">
@@ -509,19 +515,38 @@ const System = () => {
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.currentTarget.value)}
               />
-              <PiMagnifyingGlass />
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button className="cursor-default">
+                      <PiMagnifyingGlass />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Start typing in search box...</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
             <div className="flex items-center gap-2">
-              <button
-                className="rounded-md border border-white/40 p-1.5"
-                onClick={() => {
-                  setFolderId("");
-                  folderForm.reset();
-                  setOpenFolderModal(true);
-                }}
-              >
-                <PiFolderPlus />
-              </button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      className="rounded-md border border-white/40 p-1.5"
+                      onClick={() => {
+                        folderForm.reset();
+                        setOpenFolderModal(true);
+                      }}
+                    >
+                      <PiFolderPlus />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Add folder</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
               <button
                 disabled={allFolders?.length === 0}
                 className="rounded-md border border-white/40 p-1.5 md:hidden"
@@ -531,7 +556,18 @@ const System = () => {
                   setOpenFileModal(true);
                 }}
               >
-                <PiFilePlus />
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button className="cursor-default">
+                        <PiFilePlus />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Add file</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </button>
               <Button
                 disabled={allFolders?.length === 0}
@@ -545,12 +581,21 @@ const System = () => {
                 Add File
               </Button>
 
-              <button
-                className="rounded-md border border-white/40 p-1.5"
-                onClick={() => setIsTable((prev) => !prev)}
-              >
-                {isTable ? <PiTable /> : <PiList />}
-              </button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      className="rounded-md border border-white/40 p-1.5"
+                      onClick={() => setIsTable((prev) => !prev)}
+                    >
+                      {isTable ? <PiTable /> : <PiList />}
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{isTable ? "List view" : "Table view"}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
 
               {isTable && (
                 <>
@@ -590,13 +635,22 @@ const System = () => {
                         </DialogContent>
                       </Dialog>
 
-                      <button
-                        disabled={selectedRowIds.length < 1}
-                        onClick={() => setDeleteFolderOpened(true)}
-                        className="rounded-md border border-gray-400 p-2.5"
-                      >
-                        <PiTrash width={17} height={17} />
-                      </button>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <button
+                              disabled={selectedRowIds.length < 1}
+                              onClick={() => setDeleteFolderOpened(true)}
+                              className="rounded-md border border-gray-400 p-1"
+                            >
+                              <PiTrash width={17} height={17} />
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Delete</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </>
                   )}
                 </>
@@ -742,7 +796,6 @@ const System = () => {
                                       <DialogFooter>
                                         <Button
                                           variant="ghost"
-                                          className="border border-white/20 bg-white text-white/20 hover:bg-white"
                                           onClick={() => {
                                             setFolderId("");
                                             setDeleteFolderOpened(false);
@@ -865,7 +918,6 @@ const System = () => {
                                   <DialogFooter>
                                     <Button
                                       variant="ghost"
-                                      className="border border-white/20 bg-white text-white/20 hover:bg-white"
                                       onClick={() => {
                                         setFileId("");
                                         setDeleteFileOpened(false);
@@ -912,7 +964,7 @@ const System = () => {
                       ref={ref}
                       className="sticky bottom-2 left-0 right-0 flex w-full items-end justify-end text-black"
                     >
-                      <div className="z-10 flex w-[276px] flex-col rounded-b-lg border-white/40 bg-black text-xs shadow-lg">
+                      <div className="z-10 flex w-[276px] flex-col rounded-b-lg border-white/40 text-xs shadow-lg">
                         <div className="flex items-center justify-between rounded-t-lg bg-[#F4F4F4] p-2">
                           <div className="flex items-center gap-1">
                             <PiFile />

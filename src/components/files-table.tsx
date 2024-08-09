@@ -505,7 +505,6 @@ const FilesTable = ({
                     <DialogFooter>
                       <Button
                         variant="ghost"
-                        className="border border-white/20 bg-white text-white/20 hover:bg-white"
                         onClick={() => {
                           setEntityId("");
                           setOpenedDelete(false);

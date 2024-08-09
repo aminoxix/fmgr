@@ -21,15 +21,15 @@ export default function Layout({ children }: PropsWithChildrenType) {
         <meta name="description" content="developed by aminos" />
         <link rel="icon" href="/fmgr.png" />
       </Head>
-      <main className="flex min-h-screen flex-1 items-center justify-center bg-black">
+      <main className="flex min-h-screen flex-1 items-center justify-center">
         {status === "loading" ? (
-          <LuLoader2 className="h-6 w-6" color="#fff" />
+          <LuLoader2 className="h-6 w-6 animate-spin" color="#fff" />
         ) : (
           <>
             {data ? (
-              <div className="flex min-h-screen flex-1">
+              <div className="relative flex min-h-screen flex-1">
                 <DesktopSidebar />
-                <div className="flex min-h-screen flex-1 flex-col items-center justify-between gap-4 bg-black px-4 py-4 text-white md:px-12">
+                <div className="flex min-h-screen flex-1 flex-col items-center justify-between gap-4 px-4 py-4 text-white md:px-12">
                   <Image
                     className="h-15 w-15 items-center justify-center rounded-md border border-gray-300 bg-gray-900 bg-opacity-0 bg-clip-padding p-2 backdrop-blur-sm backdrop-filter md:invisible"
                     src="/fmgr.png"

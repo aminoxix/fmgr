@@ -1,12 +1,21 @@
-import { useForm } from "@mantine/form";
+import { useRouter } from "next/router";
 import { useState } from "react";
-import { PiFolderPlus } from "react-icons/pi";
+
+import { useForm } from "@mantine/form";
 import { api } from "~/utils/api";
-import { HeroIcon } from "./icons";
+
 import FolderModal from "./modals/folder";
 import { Button } from "./ui/button";
 
+import { PiFolderPlus } from "react-icons/pi";
+import { HeroIcon } from "./icons";
+
 const InitialUI = () => {
+  const router = useRouter();
+
+  const id = router.query.slug?.[router.query.slug?.length - 1];
+  console.log(router.query.slug);
+
   const [openFolderModal, setOpenFolderModal] = useState<boolean>(false);
   const [folderId, setFolderId] = useState<string>("");
 
@@ -54,6 +63,7 @@ const InitialUI = () => {
         setOpenFolderModal={setOpenFolderModal}
         folderForm={folderForm}
         folderId={folderId}
+        parentId={id}
         setFolderId={setFolderId}
       />
     </div>

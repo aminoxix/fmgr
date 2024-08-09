@@ -5,17 +5,8 @@ import { useEffect, useState } from "react";
 import moment from "moment";
 import { api, type RouterOutputs } from "~/utils/api";
 
-import { Avatar, Button } from "@mantine/core";
+import { Avatar } from "@mantine/core";
 import { useForm } from "@mantine/form";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
 
 import {
   Dialog,
@@ -25,6 +16,21 @@ import {
   DialogHeader,
   DialogTitle,
 } from "~/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
+import { Button } from "../ui/button";
 
 import type { JSONValue } from "postgres";
 import { Drawer, DrawerContent } from "~/components/ui/drawer";
@@ -390,7 +396,7 @@ const SystemSlug = () => {
       />
 
       {isPending ? (
-        <LuLoader2 className="h-6 w-6" color="#fff" />
+        <LuLoader2 className="h-6 w-6 animate-spin" color="#fff" />
       ) : (
         <div className="flex w-full flex-col gap-8 md:p-4">
           <div className="flex items-center justify-between gap-2">
@@ -406,19 +412,39 @@ const SystemSlug = () => {
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.currentTarget.value)}
                 />
-                <PiMagnifyingGlass />
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button className="cursor-default">
+                        <PiMagnifyingGlass />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Start typing in search box...</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <button
-                className="rounded-md border border-white/40 p-1.5"
-                onClick={() => {
-                  folderForm.reset();
-                  setOpenFolderModal(true);
-                }}
-              >
-                <PiFolderPlus />
-              </button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      className="rounded-md border border-white/40 p-1.5"
+                      onClick={() => {
+                        folderForm.reset();
+                        setOpenFolderModal(true);
+                      }}
+                    >
+                      <PiFolderPlus />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Add folder</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
               <button
                 disabled={allFolders?.length === 0}
                 className="rounded-md border border-white/40 p-1.5 md:hidden"
@@ -429,7 +455,18 @@ const SystemSlug = () => {
                   setOpenFileModal(true);
                 }}
               >
-                <PiFilePlus />
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button className="cursor-default">
+                        <PiFilePlus />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Add file</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </button>
               <Button
                 disabled={allFolders?.length === 0}
@@ -443,16 +480,26 @@ const SystemSlug = () => {
               >
                 Add File
               </Button>
-              <button
-                className="rounded-md border border-white/40 p-1.5"
-                onClick={() => setIsTable((prev) => !prev)}
-              >
-                {isTable ? <PiTable /> : <PiList />}
-              </button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      className="rounded-md border border-white/40 p-1.5"
+                      onClick={() => setIsTable((prev) => !prev)}
+                    >
+                      {isTable ? <PiTable /> : <PiList />}
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{isTable ? "List view" : "Table view"}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </div>
 
-          {filteredFolders?.length ? (
+          {Number(filteredFolders?.length) > 0 ||
+          Number(filteredFiles?.length) > 0 ? (
             <>
               {isTable ? (
                 <FilesTable
@@ -590,7 +637,6 @@ const SystemSlug = () => {
                                     <DialogFooter>
                                       <Button
                                         variant="ghost"
-                                        className="border border-white/20 bg-white text-white/20 hover:bg-white"
                                         onClick={() => {
                                           setFolderId("");
                                           setDeleteFolderOpened(false);

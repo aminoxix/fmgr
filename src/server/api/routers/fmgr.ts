@@ -112,6 +112,8 @@ export const fManagerRouter = createTRPCRouter({
       const data = await ctx.db.query.folder.findMany({
         limit: input?.take ? take + 10 : undefined,
         orderBy: (folder, { desc }) => [desc(folder.createdAt)],
+        where: (folder, funcs) =>
+          funcs.eq(folder.createdBy, ctx.session.user.id),
       });
 
       return data as {
@@ -375,6 +377,7 @@ export const fManagerRouter = createTRPCRouter({
     }
     return await ctx.db.query.file.findMany({
       orderBy: (file, { desc }) => [desc(file.createdAt)],
+      where: (file, funcs) => funcs.eq(file.createdBy, ctx.session.user.id),
     });
   }),
 

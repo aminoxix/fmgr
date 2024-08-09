@@ -13,7 +13,7 @@ const DesktopSidebar = () => {
   const { data: sessionData } = useSession();
 
   return (
-    <aside className="hidden basis-1/4 rounded-r-xl border-r border-white/20 bg-black p-4 md:flex md:p-8">
+    <aside className="hidden basis-1/4 rounded-r-xl border-r border-white/20 p-4 md:flex md:p-8">
       <div className="flex h-screen w-full flex-col justify-between">
         <h1 className="text-base font-extrabold tracking-tight text-white">
           <Image src="/fmgr.png" alt="f manager" width={50} height={50} />
@@ -24,7 +24,7 @@ const DesktopSidebar = () => {
             <div key={menu.name}>
               <Link
                 href={menu.url}
-                className={`flex w-full items-center gap-4 rounded-lg bg-black/20 px-4 py-2 text-white transition hover:bg-white/10 ${
+                className={`/20 flex w-full items-center gap-4 rounded-lg px-4 py-2 text-white transition hover:bg-white/10 ${
                   pathname === menu.url && "bg-white/10"
                 }`}
               >
