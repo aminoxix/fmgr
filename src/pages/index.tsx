@@ -1,5 +1,5 @@
+import Heading from "~/components/atoms/text/heading";
 import System from "~/components/system";
-import Heading from "~/components/text/heading";
 import Layout from "./layout";
 
 export default function Home() {

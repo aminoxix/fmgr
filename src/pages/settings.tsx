@@ -4,7 +4,7 @@ import Layout from "./layout";
 import { ActionIcon, CopyButton, Tooltip, rem } from "@mantine/core";
 import { PiCheck, PiCopy } from "react-icons/pi";
 
-import Heading from "~/components/text/heading";
+import Heading from "~/components/atoms/text/heading";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 
 const Profile = () => {

@@ -2,12 +2,12 @@ import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
 
-import DesktopSidebar from "~/components/sidebar/desktop";
-import MobileSidebar from "~/components/sidebar/mobile";
+import DesktopSidebar from "~/components/molecules/sidebar/desktop";
+import MobileSidebar from "~/components/molecules/sidebar/mobile";
 
 import { LuLoader2 } from "react-icons/lu";
-import { GithubSignInButton } from "~/components/buttons/auth/github";
-import { GoogleSignInButton } from "~/components/buttons/auth/google";
+import { GithubSignInButton } from "~/components/atoms/buttons/auth/github";
+import { GoogleSignInButton } from "~/components/atoms/buttons/auth/google";
 
 type PropsWithChildrenType = { children: React.ReactNode };
 

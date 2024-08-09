@@ -1,5 +1,5 @@
+import Heading from "~/components/atoms/text/heading";
 import SystemSlug from "~/components/system/slug";
-import Heading from "~/components/text/heading";
 import Layout from "./layout";
 
 const Slug = () => {

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Heading from "~/components/text/heading";
+import Heading from "~/components/atoms/text/heading";
 import { api } from "~/utils/api";
 import Layout from "./layout";
 
@@ -35,7 +35,7 @@ import {
 } from "~/components/ui/select";
 import { useToast } from "~/components/ui/use-toast";
 
-import { UploadDropzone } from "~/components/buttons/uploadthing";
+import { UploadDropzone } from "~/components/atoms/buttons/uploadthing";
 
 const Upload = () => {
   const { toast } = useToast();
@@ -43,27 +43,29 @@ const Upload = () => {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const { data: folders } = api.fManager.getAllFolders.useQuery();
-  const { mutate: createFile } = api.fManager.createFile.useMutation({
-    onSuccess: () => {
-      setOpenDialog(false);
-      form.reset();
-      toast({
-        style: {
-          backgroundColor: "#111827",
-          color: "#fff",
-        },
-        title: "Created: File",
-        description: "File has been created successfully.",
-      });
+  const { mutate: createFile, isPending } = api.fManager.createFile.useMutation(
+    {
+      onSuccess: () => {
+        setOpenDialog(false);
+        form.reset();
+        toast({
+          style: {
+            backgroundColor: "#111827",
+            color: "#fff",
+          },
+          title: "Created: File",
+          description: "File has been created successfully.",
+        });
+      },
+      onError: (error) => {
+        toast({
+          title: "Error: File",
+          description: error.message,
+          variant: "destructive",
+        });
+      },
     },
-    onError: (error) => {
-      toast({
-        title: "Error: File",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
+  );
 
   const formSchema = z.object({
     name: z.string().min(2, {
@@ -183,7 +185,9 @@ const Upload = () => {
                     )}
                   />
                   <DialogFooter className="pt-4">
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit" disabled={isPending}>
+                      Submit
+                    </Button>
                   </DialogFooter>
                 </form>
               </Form>

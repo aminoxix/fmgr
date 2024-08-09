@@ -4,16 +4,16 @@ import { api } from "~/utils/api";
 import { type UseFormReturnType } from "@mantine/form";
 import { useToast } from "~/components/ui/use-toast";
 
-import { Button } from "../ui/button";
+import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../ui/dialog";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+} from "~/components/ui/dialog";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 
 const FolderModal = ({
   parentId,
@@ -50,25 +50,25 @@ const FolderModal = ({
       },
     );
 
-  //  Do not remove this line. This is used to update the user's general flow detail
-  const { mutate: createFolder } = api.fManager.createFolder.useMutation({
-    onSuccess: () => {
-      toast({
-        title: "Folder created",
-        description: "Folder has been created successfully!",
-      });
-      folderForm.reset();
-      setOpenFolderModal(false);
-      void refetchFolders();
-      void refetchSingleFolder();
-    },
-    onError: (error) => {
-      toast({
-        title: "Failed to create folder",
-        description: `Error creating folder: ${error.message}`,
-      });
-    },
-  });
+  const { mutate: createFolder, isPending } =
+    api.fManager.createFolder.useMutation({
+      onSuccess: () => {
+        toast({
+          title: "Folder created",
+          description: "Folder has been created successfully!",
+        });
+        folderForm.reset();
+        setOpenFolderModal(false);
+        void refetchFolders();
+        void refetchSingleFolder();
+      },
+      onError: (error) => {
+        toast({
+          title: "Failed to create folder",
+          description: `Error creating folder: ${error.message}`,
+        });
+      },
+    });
 
   const { mutate: updateFolder } = api.fManager.updateFolder.useMutation({
     onSuccess: () => {
@@ -131,7 +131,7 @@ const FolderModal = ({
                       parentId,
                     });
               }}
-              disabled={!folderForm.isValid()}
+              disabled={!folderForm.isValid() || isPending}
             >
               Submit
             </Button>

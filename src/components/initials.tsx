@@ -4,17 +4,16 @@ import { useState } from "react";
 import { useForm } from "@mantine/form";
 import { api } from "~/utils/api";
 
-import FolderModal from "./modals/folder";
+import FolderModal from "./molecules/modals/folder";
 import { Button } from "./ui/button";
 
 import { PiFolderPlus } from "react-icons/pi";
-import { HeroIcon } from "./icons";
+import { HeroIcon } from "./atoms/icons/hero";
 
 const InitialUI = () => {
   const router = useRouter();
 
   const id = router.query.slug?.[router.query.slug?.length - 1];
-  console.log(router.query.slug);
 
   const [openFolderModal, setOpenFolderModal] = useState<boolean>(false);
   const [folderId, setFolderId] = useState<string>("");

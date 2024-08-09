@@ -12,11 +12,12 @@ import {
 } from "~/components/ui/dialog";
 
 import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import { api } from "~/utils/api";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 
 import Image from "next/image";
+import { UploadButton } from "~/components/atoms/buttons/uploadthing";
 import {
   Select,
   SelectContent,
@@ -24,7 +25,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { UploadButton } from "../buttons/uploadthing";
 
 const FileModal = ({
   id,
@@ -76,48 +76,28 @@ const FileModal = ({
   const url = fileForm.values.url;
   const type = fileForm.values.type;
 
-  const { mutate: updateFileName, isPending } =
-    api.fManager.updateFileName.useMutation({
+  const { mutate: addOneFile, isPending } = api.fManager.createFile.useMutation(
+    {
       onSuccess: () => {
         toast({
-          title: "File updated",
-          description: "File has been updated successfully!",
+          title: "File added",
+          description: "File has been added successfully!",
           color: "green",
         });
         fileForm.reset();
         setOpenFileModal(false);
-        setFileId("");
         void refetchFiles();
         void refetchFilesOfFolder();
       },
       onError: (error) => {
         toast({
-          title: "Failed to update file",
-          description: `Error updating file: ${error.message}`,
+          title: "Failed to add file",
+          description: `Error adding file: ${error.message}`,
+          color: "red",
         });
       },
-    });
-
-  const { mutate: addOneFile } = api.fManager.createFile.useMutation({
-    onSuccess: () => {
-      toast({
-        title: "File added",
-        description: "File has been added successfully!",
-        color: "green",
-      });
-      fileForm.reset();
-      setOpenFileModal(false);
-      void refetchFiles();
-      void refetchFilesOfFolder();
     },
-    onError: (error) => {
-      toast({
-        title: "Failed to add file",
-        description: `Error adding file: ${error.message}`,
-        color: "red",
-      });
-    },
-  });
+  );
 
   return (
     <Dialog
@@ -202,19 +182,14 @@ const FileModal = ({
               type="button"
               variant="default"
               onClick={() => {
-                fileId
-                  ? updateFileName({
-                      id: fileId,
+                url
+                  ? addOneFile({
+                      url,
+                      type,
                       name: fileForm.values.name,
+                      folderId: id ? id : fileForm.values.folderId,
                     })
-                  : url
-                    ? addOneFile({
-                        url,
-                        type,
-                        name: fileForm.values.name,
-                        folderId: id ? id : fileForm.values.folderId,
-                      })
-                    : null;
+                  : null;
               }}
               disabled={!fileForm.isValid() || isPending}
               className={isPending ? "cursor-wait" : ""}

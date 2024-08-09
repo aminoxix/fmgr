@@ -126,7 +126,6 @@ export const fManagerRouter = createTRPCRouter({
           lastModifiedAt: string;
           lastModifiedBy: string;
         }[];
-        organizationId: string | null;
         createdBy: string | null;
         parentId: string | null;
       }[];
