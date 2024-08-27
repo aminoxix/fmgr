@@ -6,7 +6,7 @@
 
 this is a [document management system](https://fmgr.vercel.app) system that allows users to create folders, upload & download files.
 
-## stack played well
+## ⚙️ stack played well
 
 [![Next.js](https://img.shields.io/badge/next%20js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org) [![NextAuth](https://img.shields.io/badge/NextAuth-346df1?style=for-the-badge&logo=nextauth&logoColor=white)](https://next-auth.js.org) [![Drizzle ORM](https://img.shields.io/badge/drizzle-C5F74F?style=for-the-badge&logo=drizzle&logoColor=black)](https://orm.drizzle.team) [![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com) [![tRPC](https://img.shields.io/badge/tRPC-%232596BE.svg?style=for-the-badge&logo=tRPC&logoColor=white) ](https://trpc.io)
 
@@ -28,4 +28,4 @@ this is a [document management system](https://fmgr.vercel.app) system that allo
 
 ### built with ♡ by
 
-> **profile** <a href="https://aminoxix.vercel.app" target="_blank" rel="noopener">@aminoxix</a> &nbsp;&middot;&nbsp; > **x** <a href="https://twitter.com/aminoxix" target="_blank" rel="noopener">@aminoxix</a>
+> **profile** <a href="https://aminoxix.vercel.app" target="_blank" rel="noopener">@aminoxix</a> &nbsp;&middot;&nbsp; **x** <a href="https://twitter.com/aminoxix" target="_blank" rel="noopener">@aminoxix</a>
